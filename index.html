@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diagram Pencar & Regresi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Slabo+27px&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Glory:ital,wght@0,100..800;1,100..800&family=Slabo+27px&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Economica:ital,wght@0,400;0,700;1,400;1,700&family=Glory:ital,wght@0,100..800&family=Slabo+27px&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <title>Semua-Statistika</title>
+
+    <style>
+        .container {
+            margin: auto;
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            font-family: 'Glory',serif;
+            font-weight: 1000;
+            color: #092b4d;
+            transition: transform 0.3s ease-in-out;
+            transform-origin: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        h1:hover {
+            transform: scale(1.08);
+        }
+        h4 {
+            font-family: 'Glory', serif;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-label{            font-family: 'Glory', serif;
+            font-weight: 600;
+            text-align: left;
+            font-size: 120%;
+        }
+
+        h5 {
+            font-family: 'Glory', serif;
+            font-weight: 600;
+            text-align: center;
+            font-size: 160%;
+            
+        }
+
+        #toggle_all {
+            transform-origin: center;
+            transition: transform 0.3s ease-in-out;
+        }
+        #toggle_all:hover {
+            transform: scale(1.04);
+        }
+        #toggle_all:active {
+            transform: scale(0.98);
+        }
+
+        body {
+            padding: 20px;
+            background-color: #f3f2dd;
+            font-family: 'Inter', sans-serif;
+            font-weight: bold;
+        }
+
+        .card, .table, #inputcard {
+            width: 100%;
+        }
+
+        .card {
+            margin-top: 10px;
+            border-radius: 1rem;
+            font-family: 'Montserrat', serif;
+            font-weight: bold;
+            background-color: #fdfff4;
+        }
+
+        #inputcard{
+            padding: 10px; /* Reduce padding */
+            margin-top: 10px; /* Adjust spacing above the card */
+            
+        }
+
+
+        canvas {
+            max-width: 100% !important;
+            width: 100% !important;
+            height: auto !important;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .form-control {
+            border-left: 5px solid #69b3d7;
+            font-family: 'Montserrat', monospace;
+            font-size: 1rem;
+            background-color: #ffffffd8;
+        }
+        .btn-primary {
+            background-color: #69b3d7;
+            border-color: #69b3d7;
+            font-family: 'Montserrat', monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            transition: transform 0.3s ease-in-out;
+            transform-origin: center;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a9bcf;
+            border-color: #5a9bcf;
+            transform: scale(1.04);
+        }
+
+        .btn-primary:active {
+            background-color: #42749d !important;
+            border-color: #42749d !important;
+            transform:scale(0.98);
+        }
+
+        #del {
+            background-color: rgb(223, 11, 11)!important;
+            font-family: 'Montserrat', monospace;
+            font-size: 1rem;
+            color: #eaeaea        !important;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            transition: transform 0.3s ease-in-out;
+            transform-origin: center;
+        }
+        #del:hover {
+            background-color: rgb(204, 8, 8) !important;
+            border-color: rgb(204, 8, 8);
+            transform: scale(1.04);
+        }
+        #del:active {
+            background-color: rgb(179, 8, 8) !important;
+            border-color: rgb(179, 8, 8) !important;
+            transform:scale(0.98);
+        }
+
+        .btn-outline-secondary{
+            background-color: #dac9a9e6;
+            border-color: #dac9a9e6;
+            font-family: 'Montserrat', monospace;
+            font-size: 1rem;
+            color: #212224;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            transition: transform 0.3s ease-in-out;
+            transform-origin: center;
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: #dabe8be6 !important;
+            border-color: #dabe8be6 !important;
+            transform: scale(1.02);
+        }
+
+        .btn-outline-secondary:active {
+            background-color: #dabe8b9e !important;
+            border-color: #dabe8b9e !important;
+            transform:scale(0.98);
+        }
+
+        table {
+            width: 100%;
+            overflow-x: scroll;
+
+            margin-top: 5px;
+            margin-bottom: 5px ;
+        }
+
+        #table-container {
+            overflow-x: auto; /* Enable horizontal scrolling */
+            max-width: 100%; /* Set a maximum width for the container */
+        }
+        th, td {
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid #faf9f6ba;
+        }
+        th {
+            background-color: #a2b0c0;
+            color: rgb(245, 241, 226);
+        }
+
+        #dataInput table {
+            border-collapse: collapse;
+        }
+
+        #dataInput th, #dataInput td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        #dataInput input[type="number"] {
+            width: 80px;
+        }
+
+        #dataInput button {
+            margin-top: 10px;
+        }
+
+        @media (max-width: 767.98px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            h4, h5 {
+                font-size: 1.1rem;
+            }
+            .card, #inputcard {
+                padding: 0.5rem !important;
+            }
+            .form-label, .form-control {
+                font-size: 0.95rem;
+            }
+            .btn, .btn-primary, .btn-outline-secondary {
+                font-size: 0.95rem;
+                padding: 0.4rem 0.6rem;
+            }
+            #dataInput input[type="number"] {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" >
+        <h1 class="mb-4 text-center" >SEMUA - STATISTIKA</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div id="inputcard" class="card p-4 shadow-sm">
+                    <div id="dataInput">
+                        <h4>Masukkan Data X dan Y:</h4>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>X</th>
+                                        <th>Y</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dataTableBody">
+                                    <tr>
+                                        <td><input type="number" class="form-control x-value" tabindex="-1"></td>
+                                        <td><input type="number" class="form-control y-value" tabindex="-1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="number" class="form-control x-value" tabindex="-1"></td>
+                                        <td><input type="number" class="form-control y-value" tabindex="-1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="number" class="form-control x-value" tabindex="-1"></td>
+                                        <td><input type="number" class="form-control y-value" tabindex="-1"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button  type="button" name="delete" class="btn btn-danger btn-sm mt-2" id="del" onclick="deleteRow()">Hapus Baris</button>
+                    </div>
+                    <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary w-100 mt-3" data-mdb-toggle="button" autocomplete="off" onclick="hitungSemua();show('statistik');show('regresi');show('plot');show('kesimpulan')"  >Hitung</button>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card p-4 shadow-sm  h-auto">
+                    <h5 class="mb-3" id="toggle_all" onclick="toggle('statistik');toggle('regresi');toggle('plot');toggle('kesimpulan')">Tampilkan/Hilangkan Hasil</h5>
+                    <div class=" row g-2">
+                        <div class="col-6">
+                            <button class="btn btn-outline-secondary w-100" onclick="toggle('statistik')">Statistik</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-outline-secondary w-100" onclick="toggle('regresi')">Regresi</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-outline-secondary w-100" onclick="toggle('plot')">Scatter Plot</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-outline-secondary w-100" onclick="toggle('kesimpulan')">Kesimpulan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div id="statistik" class="card p-4 shadow-sm mt-3 d-none"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div id="regresi" class="card p-4 shadow-sm mt-3 d-none"></div>
+            </div>
+            <div class="col-md-6">
+                 <div id="kesimpulan" class="card p-4 shadow-sm mt-3 d-none"></div>
+            </div>
+        </div>
+        <div class="row">
+             <div class="col-md-12">
+                <div id="plot" class="card p-4 shadow-sm mt-3 d-none">
+                    <canvas id="scatterChart" style="width:100%;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+             
+        </footer>
+    </div>
+
+    <script>
+        let chart;
+
+        function toggle(id) {
+            document.getElementById(id).classList.toggle('d-none');
+        }
+
+        function show(id) {
+            document.getElementById(id).classList.remove('d-none');
+        }
+
+        function focusNextVertical(currentInput) {
+            const row = currentInput.closest('tr');
+            const table = document.getElementById('dataTableBody');
+            let nextInput = null;
+            let colClass = currentInput.classList.contains('x-value') ? 'x-value' : 'y-value';
+            let currentRow = row;
+            while (currentRow) {
+                const nextRow = currentRow.nextElementSibling;
+                if (nextRow) {
+                    nextInput = nextRow.querySelector('.' + colClass);
+                    if (nextInput) break;
+                }
+                currentRow = nextRow;
+            }
+            if (!nextInput) {
+                addRow();
+                const newRow = table.lastElementChild;
+                nextInput = newRow.querySelector('.' + colClass);
+            }
+            if (nextInput) {
+                nextInput.focus();
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                focusNextVertical(event.target);
+            }
+        }
+
+        function attachVerticalNav(input) {
+            input.addEventListener('keypress', handleEnter);
+            // Only move vertically on change if the input is not empty and there IS a next row
+            input.addEventListener('change', function(e) {
+                if (e.target.value !== '') {
+                    const row = e.target.closest('tr');
+                    const colClass = e.target.classList.contains('x-value') ? 'x-value' : 'y-value';
+                    const nextRow = row.nextElementSibling;
+                    // Only move vertically if there is a next row (prevents new row on horizontal move)
+                    if (nextRow && nextRow.querySelector('.' + colClass)) {
+                        setTimeout(() => focusNextVertical(e.target), 20);
+                    }
+                }
+            });
+        }
+
+        function addRow() {
+            const tableBody = document.getElementById('dataTableBody');
+            const newRow = tableBody.insertRow();
+            const cellX = newRow.insertCell();
+            const cellY = newRow.insertCell();
+            cellX.innerHTML = '<input type="number" class="form-control x-value" tabindex="-1">';
+            cellY.innerHTML = '<input type="number" class="form-control y-value" tabindex="-1">';
+            const xInput = cellX.querySelector('input');
+            const yInput = cellY.querySelector('input');
+            attachVerticalNav(xInput);
+            attachVerticalNav(yInput);
+        }
+
+        // Attach event listeners to the initial input fields
+        window.onload = function() {
+            const initialXInputs = document.querySelectorAll('#dataTableBody .x-value');
+            const initialYInputs = document.querySelectorAll('#dataTableBody .y-value');
+
+            initialXInputs.forEach(input => attachVerticalNav(input));
+            initialYInputs.forEach(input => attachVerticalNav(input));
+        };
+
+        function deleteRow() {
+            const tableBody = document.getElementById('dataTableBody');
+            if (tableBody.rows.length > 1) {
+                tableBody.deleteRow(-1);
+            } else {
+                alert('Minimal harus ada 1 baris data.');
+            }
+        }
+
+        function parseTableInput() {
+            const xValues = [];
+            const yValues = [];
+            const xInputs = document.querySelectorAll('#dataTableBody .x-value');
+            const yInputs = document.querySelectorAll('#dataTableBody .y-value');
+
+            xInputs.forEach(input => {
+                const value = parseFloat(input.value.replace(',', '.'));
+                if (!isNaN(value)) {
+                    xValues.push(value);
+                }
+            });
+
+            yInputs.forEach(input => {
+                const value = parseFloat(input.value.replace(',', '.'));
+                if (!isNaN(value)) {
+                    yValues.push(value);
+                }
+            });
+
+            if (xValues.length !== yValues.length) {
+                alert('Jumlah nilai X dan Y tidak sama.');
+                return { x: [], y: [], valid: false };
+            }
+            if (xValues.length === 0 || yValues.length === 0) {
+                alert('Mohon masukkan setidaknya satu pasang nilai X dan Y.');
+                return { x: [], y: [], valid: false };
+            }
+
+            return { x: xValues, y: yValues, valid: true };
+        }
+
+        function formatNumber(num) {
+            return num.toFixed(2).replace('.', ',');
+        }
+
+        function hitungSemua() {
+            const data = parseTableInput();
+
+            if (!data.valid) {
+                return;
+            }
+
+            const x = data.x;
+            const y = data.y;
+            const n = x.length;
+
+            const meanX = x.reduce((a, b) => a + b, 0) / n;
+            const meanY = y.reduce((a, b) => a + b, 0) / n;
+
+            let Sxx = 0, Syy = 0, Sxy = 0, sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+            let SSE = 0, SSR = 0, SST = 0;
+            let tableRows = '';
+
+            for (let i = 0; i < n; i++) {
+                const xi = x[i];
+                const yi = y[i];
+                const xi2 = xi ** 2;
+                const yi2 = yi ** 2;
+                const xyi = xi * yi;
+                sumX += xi;
+                sumY += yi;
+                sumXY += xyi;
+                sumX2 += xi2;
+                sumY2 += yi2;
+            }
+
+            const b = parseFloat(((n * sumXY - sumX * sumY) / (n * sumX2 - sumX ** 2)).toFixed(2));
+            const a = parseFloat(((sumY * sumX2 - sumX * sumXY) / (n * sumX2 - sumX ** 2)).toFixed(2));
+
+            for (let i = 0; i < n; i++) {
+                const count = parseFloat((i+1).toFixed(0));
+                const xi = x[i];
+                const yi = y[i];
+                const yiHat = a + (b * xi);
+                const subSSE = (yi - yiHat) ** 2;
+                const subSSR = (yiHat - meanY) ** 2;
+                SSE += subSSE;
+                SSR += subSSR;
+                SST += subSSE + subSSR;
+                tableRows += `<tr>
+                    <td>${count}</td>
+                    <td>${formatNumber(xi)}</td>
+                    <td>${formatNumber(yi)}</td>
+                    <td>${formatNumber(xi * yi)}</td>
+                    <td>${formatNumber(xi ** 2)}</td>
+                    <td>${formatNumber(yi ** 2)}</td>
+                    <td>${formatNumber(yiHat)}</td>
+                    <td>${formatNumber(subSSR)}</td>
+                    <td>${formatNumber(subSSE)}</td>
+                    </tr>`;
+            }
+            tableRows += `<tr>
+                <td><strong>Total</strong></td>
+                <td><strong>Σx = ${formatNumber(sumX)}</strong></td>
+                <td><strong>Σy = ${formatNumber(sumY)}</strong></td>
+                <td><strong>Σxy = ${formatNumber(sumXY)}</strong></td>
+                <td><strong>Σx² = ${formatNumber(sumX2)}</strong></td>
+                <td><strong>Σy² = ${formatNumber(sumY2)}</strong></td>
+                <td></td>
+                <td><strong>SSR = ${formatNumber(SSR)}</strong></td>
+                <td><strong>SSE = ${formatNumber(SSE)}</strong></td>
+                </tr>`
+
+
+            const r = (n * sumXY - sumX * sumY) / Math.sqrt((n * sumX2 - sumX ** 2) * (n * sumY2 - sumY ** 2));
+
+
+            const points = x.map((xi, i) => ({ x: xi, y: y[i] }));
+
+            // Line through the regression equation
+            const minX = Math.min(...x);
+            const maxX = Math.max(...x);
+            const regressionLine = [
+                { x: minX, y: a + b * minX },
+                { x: maxX, y: a + b * maxX }
+            ];
+            
+            document.getElementById('statistik').innerHTML = `
+               
+                <h5>📊Statistik</h5>
+                <div id="table-container">
+                <table class="table table-striped w-100">
+                    <thead><tr><th>No.</th><th>x</th><th>y</th><th>xy</th><th>x²</th><th>y²</th><th>ŷ</th><th>(ŷ-ȳ)²</th><th>(y-ŷ)²</th></tr></thead>
+                    <tbody>${tableRows}</tbody>
+                </table>
+                </div>
+                <h4>Koefisien Korelasi Pearson (r): ${formatNumber(r)}</h4>
+                <ul>
+                    <li>SST: ${formatNumber(SST)}</li>
+                </ul>
+            `
+            
+            ;
+
+            document.getElementById('regresi').innerHTML = `
+                <h5>📈Persamaan Regresi</h5>
+                <h4>y = ${formatNumber(b)}x + ${formatNumber(a)}</h4>
+                <p>Koefisien Korelasi Pearson (r): ${formatNumber(r)}</p>
+                <p><strong>a</strong> (intersep): ${formatNumber(a)}</p>
+                <p><strong>b</strong> (kemiringan): ${formatNumber(b)}</p>
+            `;
+
+            const kesimpulan =
+                r === 0 ? 'Tidak ada korelasi.' :
+                (r > -0.3 && r <= 0) || (r > 0 && r <= 0.3) ? 'Lemah.' :
+                (r > -0.7 && r <= -0.3) || (r > 0.3 && r <= 0.7) ? 'Sedang/Cukup.' :
+                (r > -1 && r <= -0.7) || (r > 0.7 && r < 1) ? 'Kuat.' :
+                (r === -1 || r === 1) ? 'Sempurna.' :
+                'Tidak ada input yang valid.';
+
+            document.getElementById('kesimpulan').innerHTML = `
+                <h5>📌Kesimpulan</h5>
+                <p>Korelasi antara x dan y adalah <strong>${formatNumber(r)}</strong>. ${kesimpulan}</p>
+            `;
+
+            if (chart) chart.destroy();
+            const ctx = document.getElementById('scatterChart');
+            chart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Data',
+                            data: points,
+                            backgroundColor: 'rgba(13, 110, 253, 0.8)',
+                            pointRadius: 5,
+                            showLine: false
+                        },
+                        {
+                            label: 'Regresi',
+                            data: regressionLine,
+                            borderColor: 'rgba(220, 53, 69, 1)',
+                            borderWidth: 2,
+                            type: 'line',
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'X' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Y' }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+
+</body>
+</html>
