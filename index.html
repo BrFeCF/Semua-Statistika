@@ -253,7 +253,7 @@
             display: none;
         }
 
-        #customFileLabel {
+        #customFileLabel{
             background: #e3f2fd;
             border: 2px dashed #69b3d7;
             border-radius: 0.375rem;
@@ -270,6 +270,33 @@
             transition: background 0.2s, color 0.2s;
         }
 
+        .input-group-text {
+            background-color: #e3f2fd;
+            border: 2px dashed #69b3d7;
+            border-radius: 0.375rem;
+            color: #092b4d;
+            font-family: 'Montserrat', monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+        }
+
+        #descRawToTableBtn {
+            background-color: #e3f2fd;
+            border: 2px dashed #69b3d7;
+            border-radius: 0.375rem;
+            color: #092b4d;
+            font-family: 'Montserrat', monospace;
+        }
+
+        #descRawToTableBtn:hover {
+            background-color: #69b3d7!important;
+            border-color: #69b3d7!important;
+            color: #e3f2fd;
+            transform: scale(1.00);
+            transition: background 0.2s, color 0.2s;
+        }
+        
         #customFileLabel:hover {
             background: #69b3d7;
             color: #fff;
@@ -360,14 +387,17 @@
                         </div>
                         <button  type="button" name="delete" class="btn btn-danger btn-sm mt-2" id="del" onclick="deleteRegRow()">Hapus Baris</button>
                     </div>
-                    <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary w-100 mt-3" data-mdb-toggle="button" autocomplete="off" onclick="hitungSemua();show('statistik');show('regresi');show('plot');show('kesimpulan')"  >Hitung</button>
+                    <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary w-100 mt-3" data-mdb-toggle="button" autocomplete="off" onclick="hitungSemua();show('statistik');show('kesimpulan');show('regresi');show('plot')"  >Hitung</button>
                 </div>
                 <!-- Result Toggle Buttons and Results (Regresi) -->
                 <div class="card p-4 shadow-sm mb-3">
-                    <h5 class="mb-3" id="toggle_all" onclick="toggle('statistik');toggle('regresi');toggle('plot');toggle('kesimpulan')">Tampilkan/Hilangkan Hasil</h5>
+                    <h5 class="mb-3" id="toggle_all" onclick="toggle('statistik');toggle('kesimpulan');toggle('regresi');toggle('plot')">Tampilkan/Hilangkan Hasil</h5>
                     <div class="row g-2">
                         <div class="col-6 col-md-3">
                             <button class="btn btn-outline-secondary w-100" onclick="toggle('statistik')">Statistik</button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-outline-secondary w-100" onclick="toggle('kesimpulan')">Kesimpulan</button>
                         </div>
                         <div class="col-6 col-md-3">
                             <button class="btn btn-outline-secondary w-100" onclick="toggle('regresi')">Regresi</button>
@@ -375,14 +405,11 @@
                         <div class="col-6 col-md-3">
                             <button class="btn btn-outline-secondary w-100" onclick="toggle('plot')">Scatter Plot</button>
                         </div>
-                        <div class="col-6 col-md-3">
-                            <button class="btn btn-outline-secondary w-100" onclick="toggle('kesimpulan')">Kesimpulan</button>
-                        </div>
                     </div>
                 </div>
                 <div id="statistik" class="card p-4 shadow-sm mt-3 d-none"></div>
-                <div id="regresi" class="card p-4 shadow-sm mt-3 d-none"></div>
                 <div id="kesimpulan" class="card p-4 shadow-sm mt-3 d-none"></div>
+                <div id="regresi" class="card p-4 shadow-sm mt-3 d-none"></div>
                 <div id="plot" class="card p-4 shadow-sm mt-3 d-none">
                     <canvas id="scatterChart" style="width:100%;"></canvas>
                 </div>
@@ -416,6 +443,10 @@
                         <button  type="button" name="delete2" class="btn btn-danger btn-sm mt-2" id="del" onclick="deleteDescRow()">Hapus Baris</button>
                     </div>
                     <button class="btn btn-primary w-100 mt-3" id="descStatBtn">Hitung</button>
+                </div>
+                <div class="card p-4 shadow-sm mb-3" id="descGroupedCard">
+                    <h5>Tabel Data Kelompok</h5>
+                    <div id="descGroupedTable"></div>
                 </div>
                 <div id="descStatResult" class="mt-3"></div>
             </div>
@@ -547,6 +578,18 @@
             return num.toFixed(2).replace('.', ',');
         }
 
+        // Add global variables to store regression coefficients
+        defaultPredictX = '';
+        window.regressionCoefficients = { a: 0, b: 0 };
+
+        function predict() {
+            const xInput = document.getElementById('predictXInput');
+            let x = xInput ? parseFloat(xInput.value.replace(',', '.')) : NaN;
+            if (isNaN(x)) return '';
+            const { a, b } = window.regressionCoefficients;
+            return formatNumber(b * x + a);
+        }
+
         function hitungSemua() {
             const data = parseTableInput();
 
@@ -580,6 +623,7 @@
 
             const b = parseFloat(((n * sumXY - sumX * sumY) / (n * sumX2 - sumX ** 2)).toFixed(2));
             const a = parseFloat(((sumY * sumX2 - sumX * sumXY) / (n * sumX2 - sumX ** 2)).toFixed(2));
+            window.regressionCoefficients = { a, b };
 
             for (let i = 0; i < n; i++) {
                 const count = parseFloat((i+1).toFixed(0));
@@ -646,25 +690,30 @@
                 </ul>
             `;
 
-            document.getElementById('regresi').innerHTML = `
-                <h5>📈Persamaan Regresi</h5>
-                <h4>y = ${formatNumber(b)}x + ${formatNumber(a)}</h4>
-                <p>Koefisien Korelasi Pearson (r): ${formatNumber(r)}</p>
-                <p><strong>a</strong> (intersep): ${formatNumber(a)}</p>
-                <p><strong>b</strong> (kemiringan): ${formatNumber(b)}</p>
-            `;
-
             const kesimpulan =
                 r === 0 ? 'Tidak ada korelasi.' :
-                (r > -0.3 && r <= 0) || (r > 0 && r <= 0.3) ? 'Lemah.' :
-                (r > -0.7 && r <= -0.3) || (r > 0.3 && r <= 0.7) ? 'Sedang/Cukup.' :
-                (r > -1 && r <= -0.7) || (r > 0.7 && r < 1) ? 'Kuat.' :
+                (r > -0.3 && r <= 0) || (r > 0 && r <= 0.3) ? 'Lemah. Tidak disarankan untuk prediksi.' :
+                (r > -0.7 && r <= -0.3) || (r > 0.3 && r <= 0.7) ? 'Sedang/Cukup. Tidak disarankan untuk prediksi.' :
+                (r > -1 && r <= -0.7) || (r > 0.7 && r < 1) ? 'Kuat. Boleh dilakukan prediksi.' :
                 (r === -1 || r === 1) ? 'Sempurna.' :
                 'Tidak ada input yang valid.';
 
             document.getElementById('kesimpulan').innerHTML = `
                 <h5>📌Kesimpulan</h5>
                 <p>Korelasi antara x dan y adalah <strong>${formatNumber(r)}</strong>. ${kesimpulan}</p>
+            `;
+
+            document.getElementById('regresi').innerHTML = `
+                <h5>📈Persamaan Regresi</h5>
+                <h4>y = ${formatNumber(b)}x + ${formatNumber(a)}</h4>
+                <p>Koefisien Korelasi Pearson (r): ${formatNumber(r)}</p>
+                <p><strong>a</strong> (intersep): ${formatNumber(a)}</p>
+                <p><strong>b</strong> (kemiringan): ${formatNumber(b)}</p>
+                <div class="input-group mb-2" style="max-width:335px;">
+                    <span class="input-group-text">x</span>
+                    <input type="number" class="form-control" id="predictXInput" placeholder="Masukkan x untuk prediksi" oninput="document.getElementById('predictYOutput').textContent = predict();">
+                </div>
+                <h4>Prediksi y: <span id="predictYOutput"></span></h4>
             `;
 
             if (chart) chart.destroy();
@@ -941,13 +990,13 @@
                         <li>Nilai Minimum   : ${min}</li>
                         <li>Nilai Maksimum  : ${max}</li>
                         <li>Range           : ${range}</li>
-                        <li>Mean (Rata-rata): ${m.toFixed(4)}</li>
-                        <li>Median          : ${med}</li>
-                        <li>Modus           : ${mod.length ? mod.join(', ') : 'Tidak ada (semua nilai unik)'}</li>
-                        <li>Q1 (Kuartil 1)  : ${q.Q1}</li>
-                        <li>Q2 (Median)     : ${q.Q2}</li>
-                        <li>Q3 (Kuartil 3)  : ${q.Q3}</li>
-                        <li>Standar Deviasi : ${sd.toFixed(4)}</li>
+                        <li>Mean (Rata-rata): ${formatNumber(m)}</li>
+                        <li>Median          : ${formatNumber(med)}</li>
+                        <li>Modus           : ${formatNumber(mod.length) ? mod.join(', ') : 'Tidak ada (semua nilai unik)'}</li>
+                        <li>Q1 (Kuartil 1)  : ${formatNumber(q.Q1)}</li>
+                        <li>Q2 (Median)     : ${formatNumber(q.Q2)}</li>
+                        <li>Q3 (Kuartil 3)  : ${formatNumber(q.Q3)}</li>
+                        <li>Standar Deviasi : ${formatNumber(sd)}</li>
                     </ul>
                 </div>
             `;
@@ -955,7 +1004,94 @@
         document.getElementById('descStatBtn').addEventListener('click', function() {
             let arr = parseDescTable();
             renderDescStat(arr);
+            showDescResults();
         });
+        function renderGroupedTable() {
+            const xInputs = document.querySelectorAll('#descTableBody .desc-x-value');
+            const yInputs = document.querySelectorAll('#descTableBody .desc-y-value');
+            let data = [];
+            for (let i = 0; i < xInputs.length; i++) {
+                let x = parseFloat(xInputs[i].value);
+                let y = parseInt(yInputs[i].value);
+                if (!isNaN(x) && !isNaN(y) && y > 0) {
+                    data.push({ x, f: y });
+                }
+            }
+            const card = document.getElementById('descGroupedCard');
+            if (data.length === 0) {
+                card.classList.add('d-none');
+                document.getElementById('descGroupedTable').innerHTML = '';
+                return;
+            } else {
+                card.classList.remove('d-none');
+            }
+            // Sort by x
+            data.sort((a, b) => a.x - b.x);
+            // Find min, max, n, and number of classes (Sturges' rule)
+            const min = data[0].x;
+            const max = data[data.length - 1].x;
+            const n = data.reduce((acc, d) => acc + d.f, 0);
+            const k = Math.round(1 + 3.322 * Math.log10(n));
+            const range = max - min;
+            const interval = Math.ceil(range / k);
+            // Build grouped table
+            let rows = '';
+            let lower = min;
+            let totalFx = 0;
+            for (let i = 0; i < k; i++) {
+                let upper = lower + interval;
+                // Format as 1-3, 4-6, etc.
+                let kelas = `${lower}-${upper - 1}`;
+                // Sum frequencies in this class
+                let freq = 0;
+                let fx = 0;
+                let mid = (lower + upper - 1) / 2;
+                data.forEach(d => {
+                    if (d.x >= lower && d.x < upper) {
+                        freq += d.f;
+                        fx += d.f * mid;
+                    }
+                });
+                totalFx += fx;
+                rows += `<tr><td>${i + 1}</td><td>${kelas}</td><td>${freq}</td><td>${mid}</td><td>${fx}</td></tr>`;
+                lower = upper;
+            }
+            document.getElementById('descGroupedTable').innerHTML = `
+                <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead><tr><th>Kelas</th><th>Rentang</th><th>Frekuensi</th><th>Titik Tengah</th><th>f.x̄</th></tr></thead>
+                    <tbody>${rows}</tbody>
+                    <tfoot><tr><td colspan="4"><strong>Total f.x̄</strong></td><td><strong>${totalFx}</strong></td></tr></tfoot>
+                </table>
+                </div>
+            `;
+        }
+        // Attach to changes in descTableBody
+        const descTableBody = document.getElementById('descTableBody');
+        descTableBody.addEventListener('input', renderGroupedTable);
+        renderGroupedTable();
+
+        // Add show/hide logic for deskriptif tab results
+        function showDesc(id) {
+            document.getElementById(id).classList.remove('d-none');
+        }
+        function toggleDesc(id) {
+            document.getElementById(id).classList.toggle('d-none');
+        }
+
+        // Patch Deskriptif tab: hide grouped card and stat result by default
+        window.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('descGroupedCard').classList.add('d-none');
+            document.getElementById('descStatResult').classList.add('d-none');
+            renderGroupedTable(); // Ensure initial state is correct
+        });
+        // Show on hitung
+        function showDescResults() {
+            showDesc('descGroupedCard');
+            showDesc('descStatResult');
+            // Also force renderGroupedTable to update and show the card if there is data
+            renderGroupedTable();
+        }
     </script>
     <footer><p></p></footer>
 </body>
