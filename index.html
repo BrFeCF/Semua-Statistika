@@ -44,6 +44,13 @@
             font-weight: 600;
             margin-bottom: 5px;
         }
+        
+        .nav-tabs .nav-link {
+            font-family: 'Montserrat', monospace;
+            font-weight: 600;
+            color: #69b3d7;
+            transition: color 0.3s ease-in-out;
+        }
 
         .form-label {
             font-family: 'Glory', serif;
@@ -307,70 +314,111 @@
     <div class="container" >
         <h1 class="mb-4 text-center" >SEMUA - STATISTIKA</h1>
 
-        <!-- Input Card (Data Entry) -->
-        <div id="inputcard" class="card p-4 shadow-sm mb-3">
-            <div id="dataInput">
-                <h4>Masukkan Data X dan Y:</h4>
-                <input type="file" id="excelFileInput" accept=".xlsx,.xls" />
-                <label for="excelFileInput" id="customFileLabel">Pilih File Excel</label>
-                <span id="fileNameDisplay"></span>
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>X</th>
-                                <th>Y</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dataTableBody">
-                            <tr>
-                                <td><input type="number" class="form-control x-value" tabindex="-1"></td>
-                                <td><input type="number" class="form-control y-value" tabindex="-1"></td>
-                            </tr>
-                            <tr>
-                                <td><input type="number" class="form-control x-value" tabindex="-1"></td>
-                                <td><input type="number" class="form-control y-value" tabindex="-1"></td>
-                            </tr>
-                            <tr>
-                                <td><input type="number" class="form-control x-value" tabindex="-1"></td>
-                                <td><input type="number" class="form-control y-value" tabindex="-1"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button  type="button" name="delete" class="btn btn-danger btn-sm mt-2" id="del" onclick="deleteRow()">Hapus Baris</button>
-            </div>
-            <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary w-100 mt-3" data-mdb-toggle="button" autocomplete="off" onclick="hitungSemua();show('statistik');show('regresi');show('plot');show('kesimpulan')"  >Hitung</button>
-        </div>
+        <!-- Main Tabs: Regresi / Deskriptif -->
+        <ul class="nav nav-tabs mb-3" id="mainTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="regresi-tab" data-bs-toggle="tab" data-bs-target="#regresi-tab-pane" type="button" role="tab" aria-controls="regresi-tab-pane" aria-selected="true">Regresi</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="deskriptif-tab" data-bs-toggle="tab" data-bs-target="#deskriptif-tab-pane" type="button" role="tab" aria-controls="deskriptif-tab-pane" aria-selected="false">Deskriptif</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="mainTabContent">
 
-        <!-- Result Toggle Buttons -->
-        <div class="card p-4 shadow-sm mb-3">
-            <h5 class="mb-3" id="toggle_all" onclick="toggle('statistik');toggle('regresi');toggle('plot');toggle('kesimpulan')">Tampilkan/Hilangkan Hasil</h5>
-            <div class="row g-2">
-                <div class="col-6 col-md-3">
-                    <button class="btn btn-outline-secondary w-100" onclick="toggle('statistik')">Statistik</button>
+            <!-- Regresi Tab Content -->
+            <div class="tab-pane fade show active" id="regresi-tab-pane" role="tabpanel" aria-labelledby="regresi-tab">
+                <!-- Input Card (Data Entry) -->
+                <div id="inputcard" class="card p-4 shadow-sm mb-3">
+                    <div id="dataInput">
+                        <h4>Masukkan Data X dan Y:</h4>
+                        <input type="file" id="excelFileInput" accept=".xlsx,.xls" />
+                        <label for="excelFileInput" id="customFileLabel">Pilih File Excel</label>
+                        <span id="fileNameDisplay"></span>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>X</th>
+                                        <th>Y</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dataTableBody">
+                                    <tr>
+                                        <td><input type="number" class="form-control x-value" tabindex="-1"></td>
+                                        <td><input type="number" class="form-control y-value" tabindex="-1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="number" class="form-control x-value" tabindex="-1"></td>
+                                        <td><input type="number" class="form-control y-value" tabindex="-1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="number" class="form-control x-value" tabindex="-1"></td>
+                                        <td><input type="number" class="form-control y-value" tabindex="-1"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button  type="button" name="delete" class="btn btn-danger btn-sm mt-2" id="del" onclick="deleteRegRow()">Hapus Baris</button>
+                    </div>
+                    <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary w-100 mt-3" data-mdb-toggle="button" autocomplete="off" onclick="hitungSemua();show('statistik');show('regresi');show('plot');show('kesimpulan')"  >Hitung</button>
                 </div>
-                <div class="col-6 col-md-3">
-                    <button class="btn btn-outline-secondary w-100" onclick="toggle('regresi')">Regresi</button>
+                <!-- Result Toggle Buttons and Results (Regresi) -->
+                <div class="card p-4 shadow-sm mb-3">
+                    <h5 class="mb-3" id="toggle_all" onclick="toggle('statistik');toggle('regresi');toggle('plot');toggle('kesimpulan')">Tampilkan/Hilangkan Hasil</h5>
+                    <div class="row g-2">
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-outline-secondary w-100" onclick="toggle('statistik')">Statistik</button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-outline-secondary w-100" onclick="toggle('regresi')">Regresi</button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-outline-secondary w-100" onclick="toggle('plot')">Scatter Plot</button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <button class="btn btn-outline-secondary w-100" onclick="toggle('kesimpulan')">Kesimpulan</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <button class="btn btn-outline-secondary w-100" onclick="toggle('plot')">Scatter Plot</button>
-                </div>
-                <div class="col-6 col-md-3">
-                    <button class="btn btn-outline-secondary w-100" onclick="toggle('kesimpulan')">Kesimpulan</button>
+                <div id="statistik" class="card p-4 shadow-sm mt-3 d-none"></div>
+                <div id="regresi" class="card p-4 shadow-sm mt-3 d-none"></div>
+                <div id="kesimpulan" class="card p-4 shadow-sm mt-3 d-none"></div>
+                <div id="plot" class="card p-4 shadow-sm mt-3 d-none">
+                    <canvas id="scatterChart" style="width:100%;"></canvas>
                 </div>
             </div>
-        </div>
 
-        <!-- Statistik Result -->
-        <div id="statistik" class="card p-4 shadow-sm mt-3 d-none"></div>
-        <!-- Regresi Result -->
-        <div id="regresi" class="card p-4 shadow-sm mt-3 d-none"></div>
-        <!-- Kesimpulan Result -->
-        <div id="kesimpulan" class="card p-4 shadow-sm mt-3 d-none"></div>
-        <!-- Plot Result -->
-        <div id="plot" class="card p-4 shadow-sm mt-3 d-none">
-            <canvas id="scatterChart" style="width:100%;"></canvas>
+            <!-- Deskriptif Tab Content -->
+            <div class="tab-pane fade" id="deskriptif-tab-pane" role="tabpanel" aria-labelledby="deskriptif-tab">
+                <div id="inputcard" class="card p-4 shadow-sm mb-3">
+                    <div class="mb-2">
+                        <h4>Input Data Mentah:</h4>
+                        <input type="text" id="descRawInput" class="form-control mb-2" placeholder="Contoh: 1, 2, 2, 3, 4">
+                    </div>
+                    <div class="mb-2">
+                        <button class="btn btn-outline-secondary btn-sm mb-2" id="descRawToTableBtn">Masukkan ke Tabel</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="descTable">
+                            <thead>
+                                <tr>
+                                    <th>Nilai</th>
+                                    <th>Frekuensi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="descTableBody">
+                                <tr>
+                                    <td><input type="number" class="form-control desc-x-value"></td>
+                                    <td><input type="number" class="form-control desc-y-value" value="1"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button  type="button" name="delete2" class="btn btn-danger btn-sm mt-2" id="del" onclick="deleteDescRow()">Hapus Baris</button>
+                    </div>
+                    <button class="btn btn-primary w-100 mt-3" id="descStatBtn">Hitung</button>
+                </div>
+                <div id="descStatResult" class="mt-3"></div>
+            </div>
         </div>
     </div>
 
@@ -385,7 +433,7 @@
             document.getElementById(id).classList.remove('d-none');
         }
 
-        function focusNextVertical(currentInput) {
+        function focusNextVerticalReg(currentInput) {
             const row = currentInput.closest('tr');
             const table = document.getElementById('dataTableBody');
             let nextInput = null;
@@ -412,11 +460,11 @@
         function handleEnter(event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                focusNextVertical(event.target);
+                focusNextVerticalReg(event.target);
             }
         }
 
-        function attachVerticalNav(input) {
+        function attachVerticalNavReg(input) {
             input.addEventListener('keypress', handleEnter);
             // Only move vertically on change if the input is not empty and there IS a next row
             input.addEventListener('change', function(e) {
@@ -426,7 +474,7 @@
                     const nextRow = row.nextElementSibling;
                     // Only move vertically if there is a next row (prevents new row on horizontal move)
                     if (nextRow && nextRow.querySelector('.' + colClass)) {
-                        setTimeout(() => focusNextVertical(e.target), 20);
+                        setTimeout(() => focusNextVerticalReg(e.target), 20);
                     }
                 }
             });
@@ -441,8 +489,8 @@
             cellY.innerHTML = '<input type="number" class="form-control y-value" tabindex="-1">';
             const xInput = cellX.querySelector('input');
             const yInput = cellY.querySelector('input');
-            attachVerticalNav(xInput);
-            attachVerticalNav(yInput);
+            attachVerticalNavReg(xInput);
+            attachVerticalNavReg(yInput);
         }
 
         // Attach event listeners to the initial input fields
@@ -450,11 +498,11 @@
             const initialXInputs = document.querySelectorAll('#dataTableBody .x-value');
             const initialYInputs = document.querySelectorAll('#dataTableBody .y-value');
 
-            initialXInputs.forEach(input => attachVerticalNav(input));
-            initialYInputs.forEach(input => attachVerticalNav(input));
+            initialXInputs.forEach(input => attachVerticalNavReg(input));
+            initialYInputs.forEach(input => attachVerticalNavReg(input));
         };
 
-        function deleteRow() {
+        function deleteRegRow() {
             const tableBody = document.getElementById('dataTableBody');
             if (tableBody.rows.length > 1) {
                 tableBody.deleteRow(-1);
@@ -586,7 +634,7 @@
                 <h5>📊Statistik</h5>
                 <div id="table-container">
                 <table class="table table-striped w-100">
-                    <thead><tr><th>No.</th><th>x</th><th>y</th><th>xy</th><th>x²</th><th>y²</th><th>ŷ</th><th>(ŷ-ȳ)²</th><th>(y-ŷ)²</th></tr></thead>
+                    <th>No.</th><th>x</th><th>y</th><th>xy</th><th>x²</th><th>y²</th><th>ŷ</th><th>(ŷ-ȳ)²</th><th>(y-ŷ)²</th></tr></thead>
                     <tbody>${tableRows}</tbody>
                 </table>
                 </div>
@@ -657,6 +705,7 @@
             });
         }
 
+    
         // Excel upload handler
         document.getElementById('excelFileInput').addEventListener('change', function(e) {
             const fileName = e.target.files[0] ? e.target.files[0].name : '';
@@ -688,10 +737,224 @@
                 // Re-attach vertical navigation
                 const xInputs = document.querySelectorAll('#dataTableBody .x-value');
                 const yInputs = document.querySelectorAll('#dataTableBody .y-value');
-                xInputs.forEach(input => attachVerticalNav(input));
-                yInputs.forEach(input => attachVerticalNav(input));
+                xInputs.forEach(input => attachVerticalNavReg(input));
+                yInputs.forEach(input => attachVerticalNavReg(input));
             };
             reader.readAsArrayBuffer(file);
+        });
+    </script>
+    <script>
+        // --- Deskriptif Tab Logic ---
+        function addDescRow(x = '', y = 1) {
+            const tbody = document.getElementById('descTableBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="number" class="form-control desc-x-value" value="${x}"></td>
+                <td><input type="number" class="form-control desc-y-value" value="${y}"></td>
+            `;
+            tbody.appendChild(tr);
+        }
+        function clearDescTable() {
+            const tbody = document.getElementById('descTableBody');
+            tbody.innerHTML = '';
+        }
+        function parseDescRawInput() {
+            const val = document.getElementById('descRawInput').value;
+            let arr = val.split(/,|\s|;/).map(x => parseFloat(x.replace(',', '.'))).filter(x => !isNaN(x));
+            return arr;
+        }
+        function fillDescTableFromRaw() {
+            const arr = parseDescRawInput();
+            if (!arr.length) return;
+            // Build frequency from current table
+            const tbody = document.getElementById('descTableBody');
+            const xInputs = tbody.querySelectorAll('.desc-x-value');
+            const yInputs = tbody.querySelectorAll('.desc-y-value');
+            const freq = {};
+            for (let i = 0; i < xInputs.length; i++) {
+                let x = parseFloat(xInputs[i].value);
+                let y = parseInt(yInputs[i].value);
+                if (!isNaN(x) && !isNaN(y) && y > 0) {
+                    freq[x] = (freq[x] || 0) + y;
+                }
+            }
+            // Add new input
+            arr.forEach(x => freq[x] = (freq[x] || 0) + 1);
+            // Clear and re-render table
+            clearDescTable();
+            Object.entries(freq).forEach(([x, y]) => addDescRow(x, y));
+        }
+        
+        function deleteDescRow() {
+            const tableBody = document.getElementById('descTableBody');
+            if (tableBody.rows.length > 1) {
+                tableBody.deleteRow(-1);
+            } else {
+                alert('Minimal harus ada 1 baris data.');
+            }
+        }
+
+        // --- Deskriptif Table Vertical Navigation ---
+        function focusNextVerticalDesc(currentInput) {
+            const row = currentInput.closest('tr');
+            const table = document.getElementById('descTableBody');
+            let nextInput = null;
+            let colClass = currentInput.classList.contains('desc-x-value') ? 'desc-x-value' : 'desc-y-value';
+            let currentRow = row;
+            while (currentRow) {
+                const nextRow = currentRow.nextElementSibling;
+                if (nextRow) {
+                    nextInput = nextRow.querySelector('.' + colClass);
+                    if (nextInput) break;
+                }
+                currentRow = nextRow;
+            }
+            if (!nextInput) {
+                addDescRow();
+                const newRow = table.lastElementChild;
+                nextInput = newRow.querySelector('.' + colClass);
+            }
+            if (nextInput) {
+                nextInput.focus();
+            }
+        }
+
+        function handleEnterDesc(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                focusNextVerticalDesc(event.target);
+            }
+        }
+
+        function attachVerticalNavDesc(input) {
+            input.addEventListener('keypress', handleEnterDesc);
+            input.addEventListener('change', function(e) {
+                if (e.target.value !== '') {
+                    const row = e.target.closest('tr');
+                    const colClass = e.target.classList.contains('desc-x-value') ? 'desc-x-value' : 'desc-y-value';
+                    const nextRow = row.nextElementSibling;
+                    if (nextRow && nextRow.querySelector('.' + colClass)) {
+                        setTimeout(() => focusNextVerticalDesc(e.target), 20);
+                    }
+                }
+            });
+        }
+
+        // Attach to initial Deskriptif inputs on load
+        window.addEventListener('DOMContentLoaded', function() {
+            const initialXInputs = document.querySelectorAll('#descTableBody .desc-x-value');
+            const initialYInputs = document.querySelectorAll('#descTableBody .desc-y-value');
+            initialXInputs.forEach(input => attachVerticalNavDesc(input));
+            initialYInputs.forEach(input => attachVerticalNavDesc(input));
+        });
+
+        // Patch addDescRow to attach navigation
+        const _addDescRow = addDescRow;
+        addDescRow = function(x = '', y = 1) {
+            _addDescRow(x, y);
+            const tbody = document.getElementById('descTableBody');
+            const lastRow = tbody.lastElementChild;
+            if (lastRow) {
+                const xInput = lastRow.querySelector('.desc-x-value');
+                const yInput = lastRow.querySelector('.desc-y-value');
+                if (xInput) attachVerticalNavDesc(xInput);
+                if (yInput) attachVerticalNavDesc(yInput);
+            }
+        }
+
+        document.getElementById('descRawToTableBtn').addEventListener('click', fillDescTableFromRaw);
+        document.getElementById('descRawInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                fillDescTableFromRaw();
+                e.preventDefault();
+            }
+        });
+
+        function parseDescTable() {
+            const xInputs = document.querySelectorAll('#descTableBody .desc-x-value');
+            const yInputs = document.querySelectorAll('#descTableBody .desc-y-value');
+            let arr = [];
+            for (let i = 0; i < xInputs.length; i++) {
+                let x = parseFloat(xInputs[i].value);
+                let y = parseInt(yInputs[i].value);
+                if (!isNaN(x) && !isNaN(y) && y > 0) {
+                    for (let j = 0; j < y; j++) arr.push(x);
+                }
+            }
+            return arr;
+        }
+        function mean(arr) {
+            if (!arr.length) return 0;
+            return arr.reduce((a, b) => a + b, 0) / arr.length;
+        }
+        function median(arr) {
+            if (!arr.length) return 0;
+            let s = [...arr].sort((a, b) => a - b);
+            let mid = Math.floor(s.length / 2);
+            return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+        }
+        function mode(arr) {
+            if (!arr.length) return [];
+            let freq = {};
+            arr.forEach(x => freq[x] = (freq[x] || 0) + 1);
+            let max = Math.max(...Object.values(freq));
+            let modes = Object.keys(freq).filter(k => freq[k] === max).map(Number);
+            if (modes.length === Object.keys(freq).length) return [];
+            return modes;
+        }
+        function quartiles(arr) {
+            if (!arr.length) return {Q1:0, Q2:0, Q3:0};
+            let s = [...arr].sort((a, b) => a - b);
+            let Q2 = median(s);
+            let mid = Math.floor(s.length / 2);
+            let lower = s.slice(0, mid);
+            let upper = s.length % 2 ? s.slice(mid + 1) : s.slice(mid);
+            let Q1 = median(lower);
+            let Q3 = median(upper);
+            return { Q1, Q2, Q3 };
+        }
+        function stdev(arr) {
+            if (!arr.length) return 0;
+            let m = mean(arr);
+            let v = arr.reduce((a, b) => a + (b - m) ** 2, 0) / arr.length;
+            return Math.sqrt(v);
+        }
+        function renderDescStat(arr) {
+            if (!arr.length) {
+                document.getElementById('descStatResult').innerHTML = '<div class="alert alert-warning">Nilai tidak boleh kosong.</div>';
+                return;
+            }
+            let n = arr.length;
+            let min = Math.min(...arr);
+            let max = Math.max(...arr);
+            let range = max - min;
+            let m = mean(arr);
+            let med = median(arr);
+            let mod = mode(arr);
+            let q = quartiles(arr);
+            let sd = stdev(arr);
+            document.getElementById('descStatResult').innerHTML = `
+            </div>
+                <div class="card p-4 shadow-sm mt-3">
+                    <ul>
+                        <li>Banyak Data (n) : ${n}</li>
+                        <li>Nilai Minimum   : ${min}</li>
+                        <li>Nilai Maksimum  : ${max}</li>
+                        <li>Range           : ${range}</li>
+                        <li>Mean (Rata-rata): ${m.toFixed(4)}</li>
+                        <li>Median          : ${med}</li>
+                        <li>Modus           : ${mod.length ? mod.join(', ') : 'Tidak ada (semua nilai unik)'}</li>
+                        <li>Q1 (Kuartil 1)  : ${q.Q1}</li>
+                        <li>Q2 (Median)     : ${q.Q2}</li>
+                        <li>Q3 (Kuartil 3)  : ${q.Q3}</li>
+                        <li>Standar Deviasi : ${sd.toFixed(4)}</li>
+                    </ul>
+                </div>
+            `;
+        }
+        document.getElementById('descStatBtn').addEventListener('click', function() {
+            let arr = parseDescTable();
+            renderDescStat(arr);
         });
     </script>
     <footer><p></p></footer>
