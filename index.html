@@ -1037,7 +1037,6 @@
         function quartiles(arr) {
             if (!arr.length) return {Q1:0, Q2:0, Q3:0};
             let s = [...arr].sort((a, b) => a - b);
-            let Q2 = median(s);
             let mid = Math.floor(s.length / 2);
             let lower = s.slice(0, mid);
             let upper = s.length % 2 ? s.slice(mid + 1) : s.slice(mid);
@@ -1077,7 +1076,6 @@
                         <li>Median          : ${formatNumber(med)}</li>
                         <li>Modus           : ${formatNumber(mod.length) ? mod.join(', ') : 'Tidak ada (semua nilai unik)'}</li>
                         <li>Q1 (Kuartil 1)  : ${formatNumber(q.Q1)}</li>
-                        <li>Q2 (Median)     : ${formatNumber(q.Q2)}</li>
                         <li>Q3 (Kuartil 3)  : ${formatNumber(q.Q3)}</li>
                         <li>Standar Deviasi : ${formatNumber(sd)}</li>
                     </ul>
