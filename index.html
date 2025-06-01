@@ -22,14 +22,14 @@
     <style>
         .container {
             margin: auto;
-            max-width: 800px;
+            max-width: 80%;
             width: 100%;
         }
 
         h1 {
             font-family: 'Glory', serif;
             font-weight: 1000;
-            color: #092b4d;
+            color: #09417a;
             transition: transform 0.3s ease-in-out;
             transform-origin: center;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -88,6 +88,7 @@
 
         .card, .table, #inputcard {
             width: 100%;
+            max-width: 100%;
         }
 
         .card {
@@ -96,6 +97,7 @@
             font-family: 'Montserrat', serif;
             font-weight: bold;
             background-color: #fdfff4;
+            max-width: 100%;
         }
 
         #inputcard{
@@ -322,7 +324,7 @@
                 font-size: 1.1rem;
             }
             .card, #inputcard {
-                padding: 0.5rem !important;
+                padding: 1.5rem !important;
             }
             .form-label, .form-control {
                 font-size: 0.95rem;
@@ -333,6 +335,56 @@
             }
             #dataInput input[type="number"] {
                 width: 100px;
+            }
+
+        }
+
+        .regresi-grid {
+            display: block;
+        }
+
+        @media (min-width: 768px) {
+            .regresi-grid {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 1rem;
+                max-width: 100%;
+                width: 100%;
+                margin: auto;
+                padding: 10px;
+                padding-left: 20px;
+                padding-right: 20px;
+                grid-template-areas: "left-group right-group";
+            }
+            .regresi-left-group {
+                grid-area: left-group;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                height: 100%;
+            }
+            .regresi-right-group {
+                grid-area: right-group;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                height: 100%;
+            }
+        }
+
+        .toggle-btn-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        @media (max-width: 767.98px) {
+            .toggle-btn-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+            .toggle-btn-grid > div {
+                width: 100%;
             }
         }
     </style>
@@ -354,64 +406,86 @@
 
             <!-- Regresi Tab Content -->
             <div class="tab-pane fade show active" id="regresi-tab-pane" role="tabpanel" aria-labelledby="regresi-tab">
-                <!-- Input Card (Data Entry) -->
-                <div id="inputcard" class="card p-4 shadow-sm mb-3">
-                    <div id="dataInput">
-                        <h4>Masukkan Data X dan Y:</h4>
-                        <input type="file" id="excelFileInput" accept=".xlsx,.xls" />
-                        <label for="excelFileInput" id="customFileLabel">Pilih File Excel</label>
-                        <span id="fileNameDisplay"></span>
-                        <div class="table-responsive">
+                <div class="regresi-grid">
+                  <div class="regresi-left-group">
+                    <!-- Input Card (Data Entry) -->
+                    <div class="regresi-input">
+                      <div id="inputcard" class="card p-4 shadow-sm mb-3">
+                        <div id="dataInput">
+                          <h4>Masukkan Data X dan Y:</h4>
+                          <input type="file" id="excelFileInput" accept=".xlsx,.xls" />
+                          <label for="excelFileInput" id="customFileLabel">Pilih File Excel</label>
+                          <span id="fileNameDisplay"></span>
+                          <div class="table-responsive">
                             <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>X</th>
-                                        <th>Y</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dataTableBody">
-                                    <tr>
-                                        <td><input type="number" class="form-control x-value" tabindex="-1"></td>
-                                        <td><input type="number" class="form-control y-value" tabindex="-1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="number" class="form-control x-value" tabindex="-1"></td>
-                                        <td><input type="number" class="form-control y-value" tabindex="-1"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="number" class="form-control x-value" tabindex="-1"></td>
-                                        <td><input type="number" class="form-control y-value" tabindex="-1"></td>
-                                    </tr>
-                                </tbody>
+                              <thead>
+                                <tr>
+                                  <th>X</th>
+                                  <th>Y</th>
+                                </tr>
+                              </thead>
+                              <tbody id="dataTableBody">
+                                <tr>
+                                  <td><input type="number" class="form-control x-value" tabindex="-1"></td>
+                                  <td><input type="number" class="form-control y-value" tabindex="-1"></td>
+                                </tr>
+                                <tr>
+                                  <td><input type="number" class="form-control x-value" tabindex="-1"></td>
+                                  <td><input type="number" class="form-control y-value" tabindex="-1"></td>
+                                </tr>
+                                <tr>
+                                  <td><input type="number" class="form-control x-value" tabindex="-1"></td>
+                                  <td><input type="number" class="form-control y-value" tabindex="-1"></td>
+                                </tr>
+                              </tbody>
                             </table>
+                          </div>
+                          <button  type="button" name="delete" class="btn btn-danger btn-sm mt-2" id="del" onclick="deleteRegRow()">Hapus Baris</button>
                         </div>
-                        <button  type="button" name="delete" class="btn btn-danger btn-sm mt-2" id="del" onclick="deleteRegRow()">Hapus Baris</button>
+                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary w-100 mt-3" data-mdb-toggle="button" autocomplete="off" onclick="hitungSemua();show('statistik');show('kesimpulan');show('regresi');show('plot')"  >Hitung</button>
+                      </div>
                     </div>
-                    <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary w-100 mt-3" data-mdb-toggle="button" autocomplete="off" onclick="hitungSemua();show('statistik');show('kesimpulan');show('regresi');show('plot')"  >Hitung</button>
-                </div>
-                <!-- Result Toggle Buttons and Results (Regresi) -->
-                <div class="card p-4 shadow-sm mb-3">
-                    <h5 class="mb-3" id="toggle_all" onclick="toggle('statistik');toggle('kesimpulan');toggle('regresi');toggle('plot')">Tampilkan/Hilangkan Hasil</h5>
-                    <div class="row g-2">
-                        <div class="col-6 col-md-3">
+                    <!-- Statistik Card -->
+                    <div class="regresi-statistik">
+                      <div id="statistik" class="card p-4 shadow-sm mt-3 d-none"></div>
+                    </div>
+                  </div>
+                  <div class="regresi-right-group">
+                    <!-- Result Toggle Buttons -->
+                    <div class="regresi-toggles">
+                      <div class="card p-4 shadow-sm mb-3">
+                        <h5 class="mb-3" id="toggle_all" onclick="toggle('statistik');toggle('kesimpulan');toggle('regresi');toggle('plot')">Tampilkan/Hilangkan Hasil</h5>
+                        <div class="row g-2 toggle-btn-grid">
+                          <div>
                             <button class="btn btn-outline-secondary w-100" onclick="toggle('statistik')">Statistik</button>
-                        </div>
-                        <div class="col-6 col-md-3">
+                          </div>
+                          <div>
                             <button class="btn btn-outline-secondary w-100" onclick="toggle('kesimpulan')">Kesimpulan</button>
-                        </div>
-                        <div class="col-6 col-md-3">
+                          </div>
+                          <div>
                             <button class="btn btn-outline-secondary w-100" onclick="toggle('regresi')">Regresi</button>
-                        </div>
-                        <div class="col-6 col-md-3">
+                          </div>
+                          <div>
                             <button class="btn btn-outline-secondary w-100" onclick="toggle('plot')">Scatter Plot</button>
+                          </div>
                         </div>
+                      </div>
                     </div>
-                </div>
-                <div id="statistik" class="card p-4 shadow-sm mt-3 d-none"></div>
-                <div id="kesimpulan" class="card p-4 shadow-sm mt-3 d-none"></div>
-                <div id="regresi" class="card p-4 shadow-sm mt-3 d-none"></div>
-                <div id="plot" class="card p-4 shadow-sm mt-3 d-none">
-                    <canvas id="scatterChart" style="width:100%;"></canvas>
+                    <!-- Kesimpulan Card -->
+                    <div class="regresi-kesimpulan">
+                      <div id="kesimpulan" class="card p-4 shadow-sm mt-3 d-none"></div>
+                    </div>
+                    <!-- Regresi Card -->
+                    <div class="regresi-regresi">
+                      <div id="regresi" class="card p-4 shadow-sm mt-3 d-none"></div>
+                    </div>
+                    <!-- Plot Card -->
+                    <div class="regresi-plot">
+                      <div id="plot" class="card p-4 shadow-sm mt-3 d-none">
+                        <canvas id="scatterChart" style="width:100%;"></canvas>
+                      </div>
+                    </div>
+                  </div>
                 </div>
             </div>
 
@@ -575,7 +649,16 @@
         }
 
         function formatNumber(num) {
-            return num.toFixed(2).replace('.', ',');
+            // Accepts number or string, always returns string with ',' as decimal separator, no trailing zeros
+            let n = typeof num === 'number' ? num : parseFloat((num + '').replace(',', '.'));
+            if (isNaN(n)) return '';
+            // If integer, show as integer
+            if (Number.isInteger(n)) return n.toString();
+            // If decimal, show up to 2 decimals, but remove trailing .00 or ,00
+            let s = n.toFixed(2).replace('.', ',');
+            if (s.endsWith(',00')) return s.slice(0, -3);
+            if (s.endsWith(',0')) return s.slice(0, -2);
+            return s;
         }
 
         // Add global variables to store regression coefficients
@@ -587,7 +670,7 @@
             let x = xInput ? parseFloat(xInput.value.replace(',', '.')) : NaN;
             if (isNaN(x)) return '';
             const { a, b } = window.regressionCoefficients;
-            return formatNumber(b * x + a);
+            return formatNumber((b * x + a).toFixed(2));
         }
 
         function hitungSemua() {
@@ -637,27 +720,27 @@
                 SST += subSSE + subSSR;
                 tableRows += `<tr>
                     <td>${count}</td>
-                    <td>${formatNumber(xi)}</td>
-                    <td>${formatNumber(yi)}</td>
-                    <td>${formatNumber(xi * yi)}</td>
-                    <td>${formatNumber(xi ** 2)}</td>
-                    <td>${formatNumber(yi ** 2)}</td>
-                    <td>${formatNumber(yiHat)}</td>
-                    <td>${formatNumber(subSSR)}</td>
-                    <td>${formatNumber(subSSE)}</td>
+                    <td>${xi === 0 ? 0 : formatNumber((xi).toFixed(2))}</td>
+                    <td>${yi === 0 ? 0 : formatNumber((yi).toFixed(2))}</td>
+                    <td>${xi * yi === 0 ? 0 : formatNumber((xi * yi).toFixed(2))}</td>
+                    <td>${xi ** 2 === 0 ? 0 : formatNumber((xi ** 2).toFixed(2))}</td>
+                    <td>${yi ** 2 === 0 ? 0 : formatNumber((yi ** 2).toFixed(2))}</td>
+                    <td>${yiHat === 0 ? 0 : formatNumber((yiHat).toFixed(2))}</td>
+                    <td>${subSSR === 0 ? 0 : formatNumber((subSSR).toFixed(2))}</td>
+                    <td>${subSSE === 0 ? 0 : formatNumber((subSSE).toFixed(2))}</td>
                     </tr>`;
             }
 
             tableRows += `<tr>
                 <td><strong>Total</strong></td>
-                <td><strong>Σx = ${formatNumber(sumX)}</strong></td>
-                <td><strong>Σy = ${formatNumber(sumY)}</strong></td>
-                <td><strong>Σxy = ${formatNumber(sumXY)}</strong></td>
-                <td><strong>Σx² = ${formatNumber(sumX2)}</strong></td>
-                <td><strong>Σy² = ${formatNumber(sumY2)}</strong></td>
+                <td><strong>Σx = ${formatNumber((sumX).toFixed(2))}</strong></td>
+                <td><strong>Σy = ${formatNumber((sumY).toFixed(2))}</strong></td>
+                <td><strong>Σxy = ${formatNumber((sumXY).toFixed(2))}</strong></td>
+                <td><strong>Σx² = ${formatNumber((sumX2).toFixed(2))}</strong></td>
+                <td><strong>Σy² = ${formatNumber((sumY2).toFixed(2))}</strong></td>
                 <td></td>
-                <td><strong>SSR = ${formatNumber(SSR)}</strong></td>
-                <td><strong>SSE = ${formatNumber(SSE)}</strong></td>
+                <td><strong>SSR = ${formatNumber((SSR).toFixed(2))}</strong></td>
+                <td><strong>SSE = ${formatNumber((SSE).toFixed(2))}</strong></td>
                 </tr>`
 
             const r = (n * sumXY - sumX * sumY) / Math.sqrt((n * sumX2 - sumX ** 2) * (n * sumY2 - sumY ** 2));
@@ -682,11 +765,11 @@
                     <tbody>${tableRows}</tbody>
                 </table>
                 </div>
-                <h4>Koefisien Korelasi Pearson (r): ${formatNumber(r)}</h4>
+                <h4>Koefisien Korelasi Pearson (r): ${formatNumber((r).toFixed(2))}</h4>
                 <ul>
-                    <li>SST: ${formatNumber(SST)}</li>
-                    <li>Koefisien Determinasi (r²): ${formatNumber(r2)}</li>
-                    <li>Kesalahan Standar Estimasi (Sest): ${formatNumber(Sest)}</li>
+                    <li>SST: ${formatNumber((SST).toFixed(2))}</li>
+                    <li>Koefisien Determinasi (r²): ${formatNumber((r2).toFixed(2))}</li>
+                    <li>Kesalahan Standar Estimasi (Sest): ${formatNumber((Sest).toFixed(2))}</li>
                 </ul>
             `;
 
@@ -700,18 +783,18 @@
 
             document.getElementById('kesimpulan').innerHTML = `
                 <h5>📌Kesimpulan</h5>
-                <p>Korelasi antara x dan y adalah <strong>${formatNumber(r)}</strong>. ${kesimpulan}</p>
+                <p>Korelasi antara x dan y adalah <strong>${formatNumber((r).toFixed(2))}</strong>. ${kesimpulan}</p>
             `;
 
             document.getElementById('regresi').innerHTML = `
                 <h5>📈Persamaan Regresi</h5>
-                <h4>y = ${formatNumber(b)}x + ${formatNumber(a)}</h4>
-                <p>Koefisien Korelasi Pearson (r): ${formatNumber(r)}</p>
-                <p><strong>a</strong> (intersep): ${formatNumber(a)}</p>
-                <p><strong>b</strong> (kemiringan): ${formatNumber(b)}</p>
+                <h4>y = ${formatNumber((b).toFixed(2))}x + ${formatNumber((a).toFixed(2))}</h4>
+                <p>Koefisien Korelasi Pearson (r): ${formatNumber((r).toFixed(2))}</p>
+                <p><strong>a</strong> (intersep): ${formatNumber((a).toFixed(2))}</p>
+                <p><strong>b</strong> (kemiringan): ${formatNumber((b).toFixed(2))}</p>
                 <div class="input-group mb-2" style="max-width:335px;">
                     <span class="input-group-text">x</span>
-                    <input type="number" class="form-control" id="predictXInput" placeholder="Masukkan x untuk prediksi" oninput="document.getElementById('predictYOutput').textContent = predict();">
+                    <input type="number" class="form-control" id="predictXInput" placeholder="Masukkan nilai x" oninput="document.getElementById('predictYOutput').textContent = predict();">
                 </div>
                 <h4>Prediksi y: <span id="predictYOutput"></span></h4>
             `;
