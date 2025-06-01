@@ -86,23 +86,30 @@
             font-weight: bold;
         }
 
-        .card, .table, #inputcard {
+        .inputcard {
+            width: 100%;
+            max-width: 100%;
+            padding: 5px;
+            margin-top: 0 !important;
+        }
+
+        /* Only add margin-top to .inputcard if not the first child in .tab-pane */
+        .tab-pane > .inputcard:not(:first-child) {
+            margin-top: 10px !important;
+        }
+
+        .table {
             width: 100%;
             max-width: 100%;
         }
 
         .card {
-            margin-top: 10px;
+            margin-top: 0 !important;
             border-radius: 1rem;
             font-family: 'Montserrat', serif;
             font-weight: bold;
             background-color: #fdfff4;
-            max-width: 100%;
-        }
-
-        #inputcard{
-            padding: 10px; /* Reduce padding */
-            margin-top: 10px; /* Adjust spacing above the card */    
+            width: 100%;
         }
 
         canvas {
@@ -248,7 +255,7 @@
         }
 
         #dataInput button {
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         #excelFileInput {
@@ -323,7 +330,7 @@
             h4, h5 {
                 font-size: 1.1rem;
             }
-            .card, #inputcard {
+            .card, .inputcard {
                 padding: 1rem !important;
             }
             .form-label, .form-control {
@@ -351,9 +358,7 @@
                 max-width: 100%;
                 width: 100%;
                 margin: auto;
-                padding: 10px;
-                padding-left: 20px;
-                padding-right: 20px;
+                padding: 0px;
                 grid-template-areas: "left-group right-group";
             }
             .regresi-left-group {
@@ -387,6 +392,26 @@
                 width: 100%;
             }
         }
+
+        .tab-pane {
+            padding-top: 0px;
+        }
+        .regresi-left-group,
+        .regresi-input {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+        .tab-pane > .inputcard:first-child {
+            margin-top: 0 !important;
+        }
+        .inputcard {
+            margin-top: 10px;
+        }
+
+        .regresi-left-group,
+        .regresi-input {
+            margin-top: 0 !important;
+        }
     </style>
 </head>
 <body>
@@ -410,7 +435,7 @@
                   <div class="regresi-left-group">
                     <!-- Input Card (Data Entry) -->
                     <div class="regresi-input">
-                      <div id="inputcard" class="card p-4 shadow-sm mb-3">
+                      <div class="inputcard card p-4 shadow-sm mb-3">
                         <div id="dataInput">
                           <h4>Masukkan Data X dan Y:</h4>
                           <input type="file" id="excelFileInput" accept=".xlsx,.xls" />
@@ -491,7 +516,7 @@
 
             <!-- Deskriptif Tab Content -->
             <div class="tab-pane fade" id="deskriptif-tab-pane" role="tabpanel" aria-labelledby="deskriptif-tab">
-                <div id="inputcard" class="card p-4 shadow-sm mb-3">
+                <div class="inputcard card p-4 shadow-sm mb-3">
                     <div class="mb-2">
                         <h4>Input Data Mentah:</h4>
                         <input type="text" id="descRawInput" class="form-control mb-2" placeholder="Contoh: 1, 2, 2, 3, 4">
@@ -1037,6 +1062,7 @@
         function quartiles(arr) {
             if (!arr.length) return {Q1:0, Q2:0, Q3:0};
             let s = [...arr].sort((a, b) => a - b);
+            let Q2 = median(s);
             let mid = Math.floor(s.length / 2);
             let lower = s.slice(0, mid);
             let upper = s.length % 2 ? s.slice(mid + 1) : s.slice(mid);
