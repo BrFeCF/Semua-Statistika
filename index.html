@@ -857,8 +857,7 @@
             });
         }
 
-    
-        // Excel upload handler (restore original FileReader/XLSX code)
+        // Excel upload handler 
         document.getElementById('excelFileInput').addEventListener('change', function(e) {
             const fileName = e.target.files[0] ? e.target.files[0].name : '';
             document.getElementById('fileNameDisplay').textContent = fileName;
