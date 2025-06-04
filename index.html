@@ -33,6 +33,7 @@
             transition: transform 0.3s ease-in-out;
             transform-origin: center;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
         }
 
         h1:hover {
@@ -69,6 +70,7 @@
         #toggle_all {
             transform-origin: center;
             transition: transform 0.3s ease-in-out;
+            cursor: pointer;
         }
 
         #toggle_all:hover {
@@ -81,7 +83,7 @@
 
         body {
             padding: 20px;
-            background-color: #f3f2dd;
+            background-color: #f3f1d8;
             font-family: 'Inter', sans-serif;
             font-weight: bold;
         }
@@ -142,6 +144,7 @@
             transition: background-color 0.3s ease;
             transition: transform 0.3s ease-in-out;
             transform-origin: center;
+            cursor: pointer;
         }
 
         .btn-primary:hover {
@@ -168,6 +171,7 @@
             transform-origin: center;
             margin-bottom: 0px;
             margin-top: 0px;
+            cursor: pointer;
         }
         
         #del:hover {
@@ -192,6 +196,7 @@
             transition: background-color 0.3s ease;
             transition: transform 0.3s ease-in-out;
             transform-origin: center;
+            cursor: pointer;
         }
         
         .btn-outline-secondary:hover {
@@ -853,11 +858,10 @@
         }
 
     
-        // Excel upload handler
+        // Excel upload handler (restore original FileReader/XLSX code)
         document.getElementById('excelFileInput').addEventListener('change', function(e) {
             const fileName = e.target.files[0] ? e.target.files[0].name : '';
             document.getElementById('fileNameDisplay').textContent = fileName;
-            // ...existing code for reading the file...
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
